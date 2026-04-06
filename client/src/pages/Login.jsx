@@ -9,13 +9,13 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setError(null);
         console.log('Attempting login:', { email, role });
 
         try {
-            const user = loginUser(email, password);
+            const user = await loginUser(email, password);
             console.log('User found:', user);
 
             if (user.role !== role) {

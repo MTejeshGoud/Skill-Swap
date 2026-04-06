@@ -20,7 +20,7 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         setError(null);
 
@@ -43,7 +43,7 @@ const Register = () => {
                 })
             };
 
-            registerUser(user);
+            await registerUser(user);
 
             if (role === 'Trainer') {
                 alert('Registration successful! Please wait for Admin approval before logging in.');
