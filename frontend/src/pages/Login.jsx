@@ -18,14 +18,14 @@ const Login = () => {
             const user = await loginUser(email, password);
             console.log('User found:', user);
 
-            if (user.role.toLowerCase() !== role.toLowerCase()) {
-                // If the user registered as a different role, tell them which one
-                setError(`This account is registered as a "${user.role}", but you are trying to login as a "${role}". Please switch tabs.`);
-                return;
-            }
+            const dbRole = user.role.toLowerCase();
 
-            if (user.role.toLowerCase() === 'admin') {
+            // Auto-navigate based on the true role instead of creating friction by forcing tab switches
+            if (dbRole === 'admin') {
                 navigate('/admin');
+            } else if (dbRole === 'trainer') {
+                // Direct trainers to their dashboard if applicable, otherwise home
+                navigate('/trainer');
             } else {
                 navigate('/home');
             }

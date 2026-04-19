@@ -7,7 +7,9 @@ const { verifyToken, isTrainer, isAdmin, isTrainee } = require('../middleware/au
 router.get('/approved', verifyToken, isTrainee, courseController.getApprovedCourses);
 
 // Trainer routes
+router.get('/trainer', verifyToken, isTrainer, courseController.getTrainerCourses);
 router.post('/', verifyToken, isTrainer, courseController.createCourse);
+router.put('/:courseId', verifyToken, isTrainer, courseController.updateCourse);
 router.post('/:courseId/submit', verifyToken, isTrainer, courseController.submitForApproval);
 
 // Admin routes

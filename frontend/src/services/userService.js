@@ -64,17 +64,21 @@ export const getUsers = async () => {
 };
 
 export const setTrainerFeePaid = async (userId, feePaidStatus) => {
-    if(!feePaidStatus) return true;
-    const res = await fetch(`${API_URL}/payments/trainer-fee`, {
-        method: 'POST',
+    const res = await fetch(`${API_URL}/users/${userId}/fee`, {
+        method: 'PUT',
         headers: getHeaders(),
         credentials: 'include',
-        body: JSON.stringify({ amount: 100 })
+        body: JSON.stringify({ feePaidStatus })
     });
     return res.ok;
 };
 
 // Auto approval logic for backwards capability
 export const approveTrainer = async (userId) => {
-    return await setTrainerFeePaid(userId, true);
+    const res = await fetch(`${API_URL}/users/${userId}/approve`, {
+        method: 'POST',
+        headers: getHeaders(),
+        credentials: 'include'
+    });
+    return res.ok;
 };

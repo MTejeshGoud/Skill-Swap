@@ -8,6 +8,16 @@ const courseSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    category: {
+        type: String,
+    },
+    level: {
+        type: String,
+        default: 'Beginner'
+    },
+    thumbnail: {
+        type: String,
+    },
     trainer_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -15,7 +25,7 @@ const courseSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true,
+        default: 0,
     },
     status: {
         type: String,
@@ -23,6 +33,15 @@ const courseSchema = new mongoose.Schema({
         default: 'draft',
     }
 }, { timestamps: true });
+
+courseSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+    }
+});
 
 const Course = mongoose.model('Course', courseSchema);
 module.exports = Course;

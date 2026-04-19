@@ -15,14 +15,19 @@ export const getCourses = async () => {
 
 // Save newly drafted or pending courses
 export const saveCourse = async (courseData) => {
-    const res = await fetch(`${API_URL}/courses`, {
-        method: 'POST',
+    const isUpdate = courseData.id || courseData._id;
+    const url = isUpdate ? `${API_URL}/courses/${courseData.id || courseData._id}` : `${API_URL}/courses`;
+    const method = isUpdate ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+        method: method,
         headers: getHeaders(),
         credentials: 'include',
         body: JSON.stringify(courseData)
     });
-    if (!res.ok) throw new Error('Failed to save course');
-    return await res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to save course');
+    return data;
 };
 
 // Fetch courses for the public facing pages
@@ -43,9 +48,10 @@ export const updateCourseStatus = async (courseId, status, additionalData = {}) 
     return res.ok;
 };
 
-// Compatability stubs
 export const getCoursesForTrainer = async (trainerId) => {
-    return await getCourses(); // Handled server-side automatically
+    const res = await fetch(`${API_URL}/courses/trainer`, { headers: getHeaders(), credentials: 'include' });
+    if (!res.ok) return [];
+    return await res.json();
 };
 
 export const getPendingCourses = async () => {
